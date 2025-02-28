@@ -11,7 +11,11 @@ interface AuthRequest extends Request {
 
 export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction) => {
     const token = req.header("Authorization")?.split(" ")[1];
-    if (!token) return res.status(401).json({ message: "Unauthorized" });
+    if (!token){
+
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+    }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET!);
