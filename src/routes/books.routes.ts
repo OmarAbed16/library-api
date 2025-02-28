@@ -1,12 +1,12 @@
 import express from "express";
-import { createBook, listBooks, editBook, removeBook } from "../controllers/books.controller";
-import { authenticateJWT } from "../middleware/auth.middleware";
+import BookController from "../controllers/books.controller";
+import  AuthMiddleware  from "../middleware/auth.middleware";
 
 const router = express.Router();
 
-router.post("/", authenticateJWT, createBook);
-router.get("/", authenticateJWT, listBooks);
-router.put("/:id", authenticateJWT, editBook);
-router.delete("/:id", authenticateJWT, removeBook);
+router.post("/", AuthMiddleware.authenticateJWT, BookController.createBook.bind(BookController));
+router.get("/", AuthMiddleware.authenticateJWT, BookController.listBooks.bind(BookController));
+router.put("/:id", AuthMiddleware.authenticateJWT, BookController.editBook.bind(BookController));
+router.delete("/:id", AuthMiddleware.authenticateJWT, BookController.removeBook.bind(BookController));
 
 export default router;

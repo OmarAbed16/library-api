@@ -1,10 +1,10 @@
 # Library Management System API
 
-## Project Overview
+## 📌 Project Overview
 
 This is a **RESTful API** for managing a library system, allowing **authors and books management** with authentication using **JWT tokens**.
 
-## Installation & Setup
+## 🛠 Installation & Setup
 
 ### **1️⃣ Clone the Repository**
 
@@ -42,7 +42,7 @@ Your API is now running at `http://localhost:5000/`
 
 ---
 
-## 📌 Database Setup
+## 📂 Database Setup
 
 ### **Create MySQL Database**
 
@@ -84,16 +84,16 @@ Authorization: Bearer YOUR_JWT_TOKEN
 
 ---
 
-## 📌 Available Endpoints
+## 🚀 Available Endpoints
 
-### 🔹 **Authentication**
+### **🔹 Authentication**
 
 | Method | Endpoint         | Description               |
 | ------ | ---------------- | ------------------------- |
 | `POST` | `/auth/register` | Register a new author     |
 | `POST` | `/auth/login`    | Login and get a JWT token |
 
-### 📚 **Books Management**
+### **📚 Books Management**
 
 | Method   | Endpoint     | Description         |
 | -------- | ------------ | ------------------- |
@@ -102,7 +102,7 @@ Authorization: Bearer YOUR_JWT_TOKEN
 | `PUT`    | `/books/:id` | Update book details |
 | `DELETE` | `/books/:id` | Delete a book       |
 
-### 👨‍💼 **Authors Management**
+### **👨‍💼 Authors Management**
 
 | Method   | Endpoint       | Description                         |
 | -------- | -------------- | ----------------------------------- |
@@ -134,7 +134,33 @@ Authorization: Bearer YOUR_JWT_TOKEN
 
 ---
 
+## 🎯 Design Patterns Used
+
+### **1️⃣ Singleton Pattern (Database Connection)**
+
+- The database connection (`Database.ts`) is implemented as a **singleton** to ensure a single instance is used throughout the application, improving efficiency and resource management.
+
+### **2️⃣ Controller-Service Pattern**
+
+- The API follows a **Controller-Service structure**, where:
+  - **Controllers** handle HTTP requests and responses.
+  - **Services** contain business logic and database interactions.
+
+### **3️⃣ Middleware Pattern**
+
+- Authentication (`AuthMiddleware`) is implemented as middleware to ensure all protected routes require JWT authentication before processing requests.
+
+---
+
+## 🎉 Trello Board
+
+You can access the Trello board [here](https://trello.com/invite/b/67c080282fbc0169cd4cca0b/ATTIf7f1fbe5ba0bbe98e666ff2c1bcbffd74F8566B5/opensooq-task).
+
+---
+
 ## 🎉 Final Notes
 
 - Ensure the database is set up before running the API.
 - Use Postman to test the endpoints with JWT authentication.
+- This API follows a **class-based service structure** for better maintainability.
+- Implements **design patterns** like **Singleton, Controller-Service, and Middleware** to ensure scalability and clean code architecture.

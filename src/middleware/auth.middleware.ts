@@ -4,24 +4,28 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// Extend Express Request Type to Include `user`
-interface AuthRequest extends Request {
+// Extend Request type to include user
+interface AuthenticatedRequest extends Request {
     user?: any;
 }
 
-export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunction) => {
-    const token = req.header("Authorization")?.split(" ")[1];
-    if (!token){
+class AuthMiddleware {
+    authenticateJWT(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+        const token = req.header("Authorization")?.split(" ")[1];
+        if (!token)
+        {
+            res.status(401).json({ message: "Unauthorized" });
+            return;
+        }
 
-        res.status(401).json({ message: "Unauthorized" });
-        return;
+        try {
+            req.user = jwt.verify(token, process.env.JWT_SECRET!);
+            next();
+        } catch (error) {
+            res.status(403).json({ message: "Forbidden" });
+        }
     }
+}
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-        req.user = decoded;  // Now TypeScript recognizes `req.user`
-        next();
-    } catch (error) {
-        res.status(403).json({ message: "Forbidden" });
-    }
-};
+// Export a singleton instance
+export default new AuthMiddleware();

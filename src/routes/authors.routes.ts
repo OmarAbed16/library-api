@@ -1,11 +1,11 @@
 import express from "express";
-import { listAuthors, editAuthor, removeAuthor } from "../controllers/authors.controller";
-import { authenticateJWT } from "../middleware/auth.middleware";
+import AuthorController from "../controllers/authors.controller";
+import AuthMiddleware from "../middleware/auth.middleware";
 
 const router = express.Router();
 
-router.get("/", authenticateJWT, listAuthors);
-router.put("/:id", authenticateJWT, editAuthor);
-router.delete("/:id", authenticateJWT, removeAuthor);
+router.get("/", AuthMiddleware.authenticateJWT, AuthorController.listAuthors.bind(AuthorController));
+router.put("/:id", AuthMiddleware.authenticateJWT, AuthorController.editAuthor.bind(AuthorController));
+router.delete("/:id", AuthMiddleware.authenticateJWT, AuthorController.removeAuthor.bind(AuthorController));
 
 export default router;
