@@ -20,7 +20,7 @@ class BookService {
                 return { success: false, message: "Author ID is required" };
             }
             
-            const [authorExists]: any = await Database.execute("SELECT id FROM authors WHERE id = ?", [authorId]);
+            const [authorExists]: any = await Database.execute("SELECT id FROM authors WHERE id = ? and is_deleted=?", [authorId,0]);
             if (authorExists.length === 0) {
                 return { success: false, message: "Author not found" };
             }
@@ -38,7 +38,7 @@ class BookService {
 
     async getBooks() {
         try {
-            const [books]: any = await Database.execute("SELECT * FROM books");
+            const [books]: any = await Database.execute("SELECT id,title,author_id,	published_year,genre FROM books where is_deleted=?",[0]);
             return { success: true, books };
         } catch (error) {
             console.error("Get books error:", error);
@@ -56,8 +56,8 @@ class BookService {
             }
 
             const [result]: any = await Database.execute(
-                "UPDATE books SET title = ?, published_year = ?, genre = ? WHERE id = ?",
-                [title, publishedYear, genre, id]
+                "UPDATE books SET title = ?, published_year = ?, genre = ? WHERE id = ? and is_deleted=?",
+                [title, publishedYear, genre, id,0]
             );
             if (result.affectedRows === 0) {
                 return { success: false, message: "Book not found" };
@@ -71,7 +71,7 @@ class BookService {
 
     async deleteBook(id: number) {
         try {
-            const [result]: any = await Database.execute("DELETE FROM books WHERE id = ?", [id]);
+            const [result]: any = await Database.execute("UPDATE books SET is_deleted=? WHERE id = ? and is_deleted=?", [1,id,0]);
             if (result.affectedRows === 0) {
                 return { success: false, message: "Book not found" };
             }

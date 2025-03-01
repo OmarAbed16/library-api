@@ -3,7 +3,7 @@ import Database from "../config/db";
 class AuthorService {
     async getAuthors() {
         try {
-            const [authors]: any = await Database.execute("SELECT id, name, email, bio FROM authors");
+            const [authors]: any = await Database.execute("SELECT id, name, email, bio FROM authors where is_deleted=?",[0]);
             return { success: true, authors };
         } catch (error) {
             console.error("Get authors error:", error);
@@ -18,8 +18,8 @@ class AuthorService {
             }
 
             const [result]: any = await Database.execute(
-                "UPDATE authors SET name = ?, bio = ? WHERE id = ?",
-                [name, bio, id]
+                "UPDATE authors SET name = ?, bio = ? WHERE id = ? and is_deleted=?",
+                [name, bio, id,0]
             );
 
             if (result.affectedRows === 0) {
@@ -36,12 +36,12 @@ class AuthorService {
     async deleteAuthor(id: number) {
         try {
             // Check if the author has books
-            const [books]: any = await Database.execute("SELECT id FROM books WHERE author_id = ?", [id]);
+            const [books]: any = await Database.execute("SELECT id FROM books WHERE author_id = ? and is_deleted=?", [id,0]);
             if (books.length > 0) {
                 return { success: false, message: "Cannot delete author. This author has books." };
             }
 
-            const [result]: any = await Database.execute("DELETE FROM authors WHERE id = ?", [id]);
+            const [result]: any = await Database.execute("UPDATE authors SET is_deleted=? WHERE id = ? and is_deleted=?", [1,id,0]);
 
             if (result.affectedRows === 0) {
                 return { success: false, message: "Author not found" };

@@ -31,8 +31,12 @@ class AuthService {
                 return { success: false, message: "Bio must be less than 500 characters" };
             }
 
-            const [existing]: any = await Database.execute("SELECT id FROM authors WHERE email = ?", [email]);
+            const [existing]: any = await Database.execute("SELECT id,is_deleted FROM authors WHERE email = ?", [email]);
             if (existing.length > 0) {
+
+                if(existing[0].is_deleted ===1){
+                    return { success: false, message: "This email is deleted" };
+                }
                 return { success: false, message: "Email is already in use" };
             }
 
@@ -73,6 +77,11 @@ class AuthService {
             if (!isMatch) {
                 return { success: false, message: "Incorrect email or password" };
             }
+
+            if (author.is_deleted === 1) {
+                return { success: false, message: "This email is deleted" };
+            }
+
 
             const token = jwt.sign({ id: author.id, email: author.email }, process.env.JWT_SECRET!, { expiresIn: "1h" });
             return { success: true, token, message: "Login successful" };
