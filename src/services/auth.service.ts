@@ -35,7 +35,7 @@ class AuthService {
             if (existing.length > 0) {
 
                 if(existing[0].is_deleted ===1){
-                    return { success: false, message: "This email is deleted" };
+                    return { success: false, message: "This email has been deleted" };
                 }
                 return { success: false, message: "Email is already in use" };
             }
@@ -79,7 +79,7 @@ class AuthService {
             }
 
             if (author.is_deleted === 1) {
-                return { success: false, message: "This email is deleted" };
+                return { success: false, message: "This email has been deleted" };
             }
 
 

@@ -49,6 +49,7 @@ All authors hashed password = 'authors@Password`
 
 ```sql
 CREATE DATABASE LibraryDB;
+USE LibraryDB;
 ```
 
 ### **Create Tables**
