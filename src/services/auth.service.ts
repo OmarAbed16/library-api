@@ -12,8 +12,8 @@ class AuthService {
 
     async register(name: string, email: string, password: string, bio: string) {
         try {
-            if (!name || !email || !password) {
-                return { success: false, message: "Name, email, and password are required" };
+            if (!name || !email || !password || !bio) {
+                return { success: false, message: "Name, email,bio, and password are required" };
             }
             if (name.length > 100) {
                 return { success: false, message: "Name must be less than 100 characters" };

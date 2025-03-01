@@ -221,3 +221,5 @@ You can access the Trello board [here](https://trello.com/invite/b/67c080282fbc0
 
 - Ensure the database is set up before running the API.
 - Use Postman to test the endpoints with JWT authentication.
+- The API uses soft delete for authors and books, marking them as deleted (is_deleted = 1) instead of removing them permanently.
+
