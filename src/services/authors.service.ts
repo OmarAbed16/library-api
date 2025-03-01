@@ -1,6 +1,13 @@
 import Database from "../config/db";
 
 class AuthorService {
+
+
+    private isValidString(str: string, maxLength: number): boolean {
+        return !!str && str.trim().length > 0 && str.length <= maxLength;
+    }
+
+
     async getAuthors() {
         try {
             const [authors]: any = await Database.execute("SELECT id, name, email, bio FROM authors where is_deleted=?",[0]);
@@ -16,6 +23,12 @@ class AuthorService {
             if (!name || !bio) {
                 return { success: false, message: "Name and bio are required" };
             }
+
+
+            if (!this.isValidString(name, 255) || !this.isValidString(bio, 500)) {
+                return { success: false, message: "Name and Bio must be non-empty and within character limits" };
+            }
+
 
             const [result]: any = await Database.execute(
                 "UPDATE authors SET name = ?, bio = ? WHERE id = ? and is_deleted=?",
